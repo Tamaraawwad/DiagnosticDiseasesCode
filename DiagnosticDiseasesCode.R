@@ -1,14 +1,12 @@
 
-"C:/Users/enasa/OneDrive/Documents/Diagnostic diseases/DiagnosticDiseasesCode"
+# creating folders 
 
-
-ff
 org::AllowFileManipulationFromInitialiseProject()
 org::InitialiseProject(
   
 HOME= "C:/Users/enasa/OneDrive/Documents/Diagnostic diseases/DiagnosticDiseasesCode",
-DATA_RAW= "C:/Users/enasa/OneDrive/Documents/Diagnostic diseases/data_raw",
-SHARED= "C:/Users/enasa/OneDrive/Documents/Diagnostic diseases/results"
+DATA_RAW = "C:/Users/enasa/OneDrive/Documents/Diagnostic diseases/data_raw",
+SHARED =  "C:/Users/enasa/OneDrive/Documents/Diagnostic diseases/results"
 )
 
 
