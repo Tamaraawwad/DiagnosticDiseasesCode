@@ -52,19 +52,16 @@ str(diag_2019)
 unique(diag_2019$`Diagnose Name`)
 
 
-
-
-tam <- xtabs(~diag_2019$`Medical Order Id`+ diag_2019$'Diagnose Name',addNA = T)
-
-chisq.test(tam,)
-
 tam <- xtabs(~ diag_2019$'Diagnose Name')
 
-
+#file.path(org::PROJ$DATA_RAW,"2019.xlsx")
+#SHARED TODAY FOR RESULTS 
 
 openxlsx :: write.xlsx(tam, 
-                       file.path("C:/Users/enasa/OneDrive/Documents/Diagnostic diseases/results",
-                                 "diagnostic.xlsx"))
+                       file.path(org::PROJ$SHARED_TODAY,"2019.xlsx"))
+
+
+chisq.test(tam)
 
 barplot(tam, main="Diagnosis Distribution",
         xlab="Number of cases")
@@ -72,28 +69,18 @@ barplot(tam, main="Diagnosis Distribution",
 
 
 
-
-
-
-
-
-
 counts <- table(diag_2019$'Diagnose Name')
 
-barplot(counts, main="Car Distribution",
-        xlab="Number of Gears")
 
 
 
 library(gmodels)
 
 
-tam2 <- CrossTable (diag_2019$`Diagnose Name`,diag_2019$Organization,addNA=T)
+tamm <- CrossTable (diag_2019$`Diagnose Name`,diag_2019$Organization,addNA=T)
 
-openxlsx :: write.xlsx(tam2, 
-                       file.path("C:/Users/enasa/OneDrive/Documents/Diagnostic diseases/results",
-                                 "diagnostic2.xlsx"))
-
+openxlsx :: write.xlsx(tamm, 
+                       file.path(org::PROJ$SHARED_TODAY,"2019cross.xlsx"))
 
 
 #library(data.table)
