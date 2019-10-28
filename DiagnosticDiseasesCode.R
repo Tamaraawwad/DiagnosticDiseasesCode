@@ -1,5 +1,6 @@
 
-# creating folders 
+# creating folders, SHARED it is an argument to the function org::InitialiseProject
+#shared ....it will create a folder inside with a date
 
 org::AllowFileManipulationFromInitialiseProject()
 org::InitialiseProject(
