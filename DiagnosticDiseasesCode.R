@@ -1,6 +1,8 @@
+C:/Users/enasa/OneDrive/Documents/Diagnostic diseases/DiagnosticDiseasesCode
+
 library(readxl)
 library(openxlsx)
-X2019 <- read_excel("C:/Users/enasa/OneDrive/Documents/Diagnostic diseases//Dr Shahinaz/Diag Data/2019.xlsx")
+X2019 <- read_excel("C:/Users/enasa/OneDrive/Documents/Diagnostic diseases/Dr Shahinaz/Diag Data/2019.xlsx")
 View(X2019)
 names(X2019)
 dim(X2019)
