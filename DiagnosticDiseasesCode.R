@@ -1,7 +1,17 @@
 
 "C:/Users/enasa/OneDrive/Documents/Diagnostic diseases/DiagnosticDiseasesCode"
 
-HHHgdf
+
+
+org::AllowFileManipulationFromInitialiseProject()
+org::InitialiseProject(
+  
+HOME= "C:/Users/enasa/OneDrive/Documents/Diagnostic diseases/DiagnosticDiseasesCode",
+DATA_RAW= "C:/Users/enasa/OneDrive/Documents/Diagnostic diseases/data_raw",
+SHARED= "C:/Users/enasa/OneDrive/Documents/Diagnostic diseases/results"
+)
+
+
 library(readxl)
 library(openxlsx)
 X2019 <- read_excel("C:/Users/enasa/OneDrive/Documents/Diagnostic diseases/Dr Shahinaz/Diag Data/2019.xlsx")
