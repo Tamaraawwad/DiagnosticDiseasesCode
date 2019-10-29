@@ -75,12 +75,23 @@ obs_2019[,ident_obs:=TRUE]
 
 xtabs(~diag_2019$`Patient DoB`)
 #how to creat age variable from date of birth
-
+#unique(diag_2019$Patient DoB`
 #d[, age := as.numeric(difftime(as.Date("2019-01-01"), as.Date(date_of_birth), units="days"))/365.25]
 
-diag_2019[,age:= as.numeric(difftime(as.Date("2019-01-01"), as.Date(`Patient DoB`), units="days"))/365.25]
+unique(diag_2019$`Patient DoB`)
+
+diag_2019[,PatientDoB:=as.Date(`Patient DoB`, format="%d-%m-%Y")]
+diag_2019[,admissiondate:=as.Date(`Admission Date`, format="%d-%m-%Y")]
 
 
+diag_2019[,age:= as.numeric(difftime(as.Date("2019-01-01"), as.Date(PatientDoB), units="days"))/365.25]
+diag_2019[, age:= round(age, digits=0)]
+
+diag_2019[,age_cat:=cut(age,
+                     include.lowest=T)]
+
+diag_2019[,age_cat:=cut(age,
+                        breaks = c(0,20,30,40,50,60,100))]
 
 diag_2019[,id_within_baradmission:=1:.N,by=BARADMISSIONID]
 xtabs(~diag_2019$id_within_baradmission)
