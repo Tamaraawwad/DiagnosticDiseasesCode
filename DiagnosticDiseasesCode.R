@@ -13,8 +13,17 @@ SHARED =  "C:/Users/enasa/OneDrive/Documents/Diagnostic diseases/results"
 library(readxl)
 library(openxlsx)
 
+#in general if I want to take a quick view on any data, i can work on data frame 
+# and do some xtabs and crosstabs, chisquare 
+# to create a new variable in ....data.frame:
+#   data$variable <- 3
+# data.table:
+#   data[,variable:=3]
+
 #creating vectors for data raw
 #DIAGNOSTIC DATA
+
+
 
 diag_2019 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2019.xlsx"))
 diag_2018 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2018.xlsx"))
@@ -42,20 +51,59 @@ obs_2017 <- read_excel(file.path(org::PROJ$DATA_RAW, "observation Data" ,"2017.x
 obs_2016 <- read_excel(file.path(org::PROJ$DATA_RAW, "observation Data" ,"2016.xlsx"))
 
 
+# transform to data tabels
+
+library(data.table)
+
+setDT(diag_2019)
+diag_2019[,ident_diag:=TRUE]
+
+
+setDT(drug_2019)
+drug_2019[,ident_drug:=TRUE]
+
+setDT(lab_2019)
+lab_2019[,ident_lab:=TRUE]
+
+setDT(obs_2019)
+obs_2019[,ident_obs:=TRUE]
+
+
+diag_2019[,id_within_baradmission:=1:.N,by=BARADMISSIONID]
+xtabs(~diag_2019$id_within_baradmission)
+
+#d[question, assignment, group/by]
+
+diag_2019[id_within_baraadmission==2001307447169]
+
+d2019 <- merge(diag_2019, drug_2019, by="BARADMISSIONID")
+
+
+d2019 <- merge(d2019, lab_2019, by="BARADMISSIONID")
+d2019 <- merge(d2019, obs_2019, by="BARADMISSIONID")
+
+
+
+
+
+
+
+
+
 
 View(diag_2019)
 names(diag_2019)
 dim(diag_2019)
 str(diag_2019)
 
-
+# primary analysis 
 unique(diag_2019$`Diagnose Name`)
 
 
 tam <- xtabs(~ diag_2019$'Diagnose Name')
 
 #file.path(org::PROJ$DATA_RAW,"2019.xlsx")
-#SHARED TODAY FOR RESULTS 
+#use SHARED TODAY FOR RESULTS 
 
 openxlsx :: write.xlsx(tam, 
                        file.path(org::PROJ$SHARED_TODAY,"2019.xlsx"))
