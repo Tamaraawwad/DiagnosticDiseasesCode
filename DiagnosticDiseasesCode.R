@@ -26,32 +26,32 @@ library(openxlsx)
 
 
 diag_2019 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2019.xlsx"))
-diag_2018 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2018.xlsx"))
-diag_2017 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2017.xlsx"))
-diag_2016 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2016.xlsx"))
+# diag_2018 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2018.xlsx"))
+# diag_2017 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2017.xlsx"))
+# diag_2016 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2016.xlsx"))
 
 
 # Drugs Data
 drug_2019 <- read_excel(file.path(org::PROJ$DATA_RAW, "Drugs Data" ,"2019.xlsx"))
-drug_2018 <- read_excel(file.path(org::PROJ$DATA_RAW, "Drugs Data" ,"2018.xlsx"))
-drug_2017 <- read_excel(file.path(org::PROJ$DATA_RAW, "Drugs Data" ,"2017.xlsx"))
-drug_2016 <- read_excel(file.path(org::PROJ$DATA_RAW, "Drugs Data" ,"2016.xlsx"))
+# drug_2018 <- read_excel(file.path(org::PROJ$DATA_RAW, "Drugs Data" ,"2018.xlsx"))
+# drug_2017 <- read_excel(file.path(org::PROJ$DATA_RAW, "Drugs Data" ,"2017.xlsx"))
+# drug_2016 <- read_excel(file.path(org::PROJ$DATA_RAW, "Drugs Data" ,"2016.xlsx"))
 
 
 #Lab Data
 lab_2019 <- read_excel(file.path(org::PROJ$DATA_RAW, "Lab Data" ,"2019.xlsx"))
-lab_2018 <- read_excel(file.path(org::PROJ$DATA_RAW, "Lab Data" ,"2018.xlsx"))
-lab_2017 <- read_excel(file.path(org::PROJ$DATA_RAW, "Lab Data" ,"2017.xlsx"))
-lab_2016 <- read_excel(file.path(org::PROJ$DATA_RAW, "Lab Data" ,"2016.xlsx"))
+# lab_2018 <- read_excel(file.path(org::PROJ$DATA_RAW, "Lab Data" ,"2018.xlsx"))
+# lab_2017 <- read_excel(file.path(org::PROJ$DATA_RAW, "Lab Data" ,"2017.xlsx"))
+# lab_2016 <- read_excel(file.path(org::PROJ$DATA_RAW, "Lab Data" ,"2016.xlsx"))
 
 #Observation Data
 obs_2019 <- read_excel(file.path(org::PROJ$DATA_RAW, "observation Data" ,"2019.xlsx"))
-obs_2018 <- read_excel(file.path(org::PROJ$DATA_RAW, "observation Data" ,"2018.xlsx"))
-obs_2017 <- read_excel(file.path(org::PROJ$DATA_RAW, "observation Data" ,"2017.xlsx"))
-obs_2016 <- read_excel(file.path(org::PROJ$DATA_RAW, "observation Data" ,"2016.xlsx"))
+# obs_2018 <- read_excel(file.path(org::PROJ$DATA_RAW, "observation Data" ,"2018.xlsx"))
+# obs_2017 <- read_excel(file.path(org::PROJ$DATA_RAW, "observation Data" ,"2017.xlsx"))
+# obs_2016 <- read_excel(file.path(org::PROJ$DATA_RAW, "observation Data" ,"2016.xlsx"))
 
 
-# transform to data tabels
+# transform to data tabels 2019 database
 
 library(data.table)
 
@@ -69,34 +69,24 @@ setDT(obs_2019)
 obs_2019[,ident_obs:=TRUE]
 
 
+#some data cleaning:
+
 diag_2019[,id_within_baradmission:=1:.N,by=BARADMISSIONID]
 xtabs(~diag_2019$id_within_baradmission)
 
-#d[question, assignment, group/by]
-
-diag_2019[id_within_baraadmission==2001307447169]
-
-d2019 <- merge(diag_2019, drug_2019, by="BARADMISSIONID")
-
-
-d2019 <- merge(d2019, lab_2019, by="BARADMISSIONID")
-d2019 <- merge(d2019, obs_2019, by="BARADMISSIONID")
+diag_2019 <- diag_2019[id_within_baradmission==1]
+nrow(diag_2019)
 
 
 
 
-
-
-
-
-
+# some decriptive analysis
 
 View(diag_2019)
 names(diag_2019)
 dim(diag_2019)
 str(diag_2019)
 
-# primary analysis 
 unique(diag_2019$`Diagnose Name`)
 
 
@@ -108,8 +98,10 @@ tam <- xtabs(~ diag_2019$'Diagnose Name')
 openxlsx :: write.xlsx(tam, 
                        file.path(org::PROJ$SHARED_TODAY,"2019.xlsx"))
 
+marital <- xtabs(~diag_2019$`Marital Status`)
 
-chisq.test(tam)
+
+
 
 barplot(tam, main="Diagnosis Distribution",
         xlab="Number of cases")
@@ -131,11 +123,6 @@ openxlsx :: write.xlsx(tamm,
                        file.path(org::PROJ$SHARED_TODAY,"2019cross.xlsx"))
 
 
-#library(data.table)
-#setDT(diag_2019)
-#View(diag_2019)
-#diag_2019[,DMDIAG:=F]
-#xtabs(~diag_2019$DMDIAG)
 
 #diag_2019['Diagnose Name'%in% c("Addisonian crisis","Tumor lysis syndrome", "Vitamin deficiency, unspecified")                                                                                  
 
@@ -154,3 +141,39 @@ openxlsx :: write.xlsx(tamm,
 #               .(Organization
 #                 
 #               )]
+
+
+
+
+#merging data sets 2019
+#to do check on duplicated cases ...
+
+#d[question, assignment, group/by]
+
+#diag_2019[BARADMISSIONID == 2001307447169]
+# we need to merge diag and lab by bara &medical order id 
+#then merge with obs by bara,medical, and admition date
+#then with drugs by bara  ....more than one drug
+
+
+
+d2019 <- merge(diag_2019, lab_2019, by="BARADMISSIONID")
+nrow(d2019)
+#xtabs(~d2019$`Medical Order Id.y`)
+
+#d2019 <- merge(diag_2019, lab_2019, by="Medical Order Id")
+
+d2019 <- merge(d2019, obs_2019, by="BARADMISSIONID")
+
+
+d2019 <- merge(d2019, drug_2019, by="BARADMISSIONID")
+
+
+
+
+
+
+
+
+
+
