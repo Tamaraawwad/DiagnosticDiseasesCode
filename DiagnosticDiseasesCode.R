@@ -12,6 +12,9 @@ SHARED =  "C:/Users/enasa/OneDrive/Documents/Diagnostic diseases/results"
 
 library(readxl)
 library(openxlsx)
+library(data.table)
+library(gmodels)
+
 
 #in general if I want to take a quick view on any data, i can work on data frame 
 # and do some xtabs and crosstabs, chisquare 
@@ -53,7 +56,6 @@ obs_2019 <- read_excel(file.path(org::PROJ$DATA_RAW, "observation Data" ,"2019.x
 
 # transform to data tabels 2019 database
 
-library(data.table)
 
 setDT(diag_2019)
 diag_2019[,ident_diag:=TRUE]
@@ -69,18 +71,45 @@ setDT(obs_2019)
 obs_2019[,ident_obs:=TRUE]
 
 
-#some data cleaning:
+#some data cleaning &  some decriptive analysis
+
+xtabs(~diag_2019$`Patient DoB`)
+#how to creat age variable from date of birth
+
+#d[, age := as.numeric(difftime(as.Date("2019-01-01"), as.Date(date_of_birth), units="days"))/365.25]
+
+diag_2019[,age:= as.numeric(difftime(as.Date("2019-01-01"), as.Date(`Patient DoB`), units="days"))/365.25]
+
+
 
 diag_2019[,id_within_baradmission:=1:.N,by=BARADMISSIONID]
 xtabs(~diag_2019$id_within_baradmission)
 
-diag_2019 <- diag_2019[id_within_baradmission==1]
-nrow(diag_2019)
+decripdiag_2019 <- diag_2019[id_within_baradmission==1]
+nrow(decripdiag_2019)
+
+xtabs(~decripdiag_2019$`Patient Sex`)
+xtabs(~decripdiag_2019$`Marital Status`)
+org<-xtabs(~decripdiag_2019$Organization)
+
+openxlsx :: write.xlsx(org, 
+                       file.path(org::PROJ$SHARED_TODAY,"2019organization.xlsx"))
+
+
+xtabs(~decripdiag_2019$`Admission Status`)
+xtabs(~decripdiag_2019$`Admission Hosp/Dept Name`)
+departments <- unique(decripdiag_2019$`Admission Hosp/Dept Name`)
+
+openxlsx :: write.xlsx(departments, 
+                       file.path(org::PROJ$SHARED_TODAY,"2019depatrment.xlsx"))
+
+xtabs(~decripdiag_2019$`Medical Order Note`)
+
+
+#creat new variable age in prescdiag2019
 
 
 
-
-# some decriptive analysis
 
 View(diag_2019)
 names(diag_2019)
@@ -98,15 +127,11 @@ tam <- xtabs(~ diag_2019$'Diagnose Name')
 openxlsx :: write.xlsx(tam, 
                        file.path(org::PROJ$SHARED_TODAY,"2019.xlsx"))
 
-marital <- xtabs(~diag_2019$`Marital Status`)
-
 
 
 
 barplot(tam, main="Diagnosis Distribution",
         xlab="Number of cases")
-
-
 
 
 counts <- table(diag_2019$'Diagnose Name')
@@ -155,15 +180,20 @@ openxlsx :: write.xlsx(tamm,
 #then merge with obs by bara,medical, and admition date
 #then with drugs by bara  ....more than one drug
 
+diag_2019[,id_within_baradmission:=1:.N,by=BARADMISSIONID]
+xtabs(~diag_2019$id_within_baradmission)
+
+#diag_2019 <- diag_2019[id_within_baradmission==1]
+nrow(diag_2019)
 
 
-d2019 <- merge(diag_2019, lab_2019, by="BARADMISSIONID")
+d2019 <- merge(diag_2019, lab_2019, by=c("BARADMISSIONID", "Medical Order Id"))
+
 nrow(d2019)
-#xtabs(~d2019$`Medical Order Id.y`)
 
-#d2019 <- merge(diag_2019, lab_2019, by="Medical Order Id")
 
-d2019 <- merge(d2019, obs_2019, by="BARADMISSIONID")
+
+d2019 <- merge(d2019, obs_2019, by=c("BARADMISSIONID", "Medical Order Id", "Admission Date"))
 
 
 d2019 <- merge(d2019, drug_2019, by="BARADMISSIONID")
