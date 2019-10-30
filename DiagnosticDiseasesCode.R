@@ -84,14 +84,16 @@ diag_2019[,PatientDoB:=as.Date(`Patient DoB`, format="%d-%m-%Y")]
 diag_2019[,admissiondate:=as.Date(`Admission Date`, format="%d-%m-%Y")]
 
 
-diag_2019[,age:= as.numeric(difftime(as.Date("2019-01-01"), as.Date(PatientDoB), units="days"))/365.25]
+diag_2019[,age:= as.numeric(difftime(as.Date(admissiondate), as.Date(PatientDoB), units="days"))/365.25]
 diag_2019[, age:= round(age, digits=0)]
 
-diag_2019[,age_cat:=cut(age,
-                     include.lowest=T)]
 
 diag_2019[,age_cat:=cut(age,
-                        breaks = c(0,20,30,40,50,60,100))]
+                        breaks = c(0,20,30,40,50,60,100)
+                        ,include.lowest=T)]
+
+
+
 
 diag_2019[,id_within_baradmission:=1:.N,by=BARADMISSIONID]
 xtabs(~diag_2019$id_within_baradmission)
@@ -101,6 +103,8 @@ nrow(decripdiag_2019)
 
 xtabs(~decripdiag_2019$`Patient Sex`)
 xtabs(~decripdiag_2019$`Marital Status`)
+xtabs(~decripdiag_2019$age_cat)
+
 org<-xtabs(~decripdiag_2019$Organization)
 
 openxlsx :: write.xlsx(org, 
@@ -191,27 +195,29 @@ openxlsx :: write.xlsx(tamm,
 #then merge with obs by bara,medical, and admition date
 #then with drugs by bara  ....more than one drug
 
-diag_2019[,id_within_baradmission:=1:.N,by=BARADMISSIONID]
+
 xtabs(~diag_2019$id_within_baradmission)
 
 #diag_2019 <- diag_2019[id_within_baradmission==1]
 nrow(diag_2019)
 
 
-d2019 <- merge(diag_2019, lab_2019, by=c("BARADMISSIONID", "Medical Order Id"))
+labd2019 <- merge(diag_2019, lab_2019, by=c("BARADMISSIONID", "Medical Order Id"))
 
-nrow(d2019)
-
-
-
-d2019 <- merge(d2019, obs_2019, by=c("BARADMISSIONID", "Medical Order Id", "Admission Date"))
+nrow(labd2019)
 
 
-d2019 <- merge(d2019, drug_2019, by="BARADMISSIONID")
+obs2019 <- merge(diag_2019, obs_2019, by=c("BARADMISSIONID", "Medical Order Id"))
+nrow(obs2019)
 
 
+diag_2019 <- diag_2019[id_within_baradmission==1]
+
+dru2019 <- merge(diag_2019, drug_2019, by="BARADMISSIONID")
+nrow(dru2019)
 
 
+dru2019[BARADMISSIONID == 2001307447169]
 
 
 
