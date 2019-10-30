@@ -120,6 +120,8 @@ openxlsx :: write.xlsx(departments,
 
 xtabs(~decripdiag_2019$`Medical Order Note`)
 
+unique(dru_2019$)
+
 
 #creat new variable age in prescdiag2019
 
