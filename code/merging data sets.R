@@ -18,11 +18,3 @@ d2019 <- merge(diag_2019, obs_2019, by="BARADMISSIONID")
 
 
 
-ident_lab <- 
-  
-ident_diag <- 
-  
-ident_obs <-
-  
-ident_drug <-
-

@@ -54,7 +54,7 @@ obs_2019 <- read_excel(file.path(org::PROJ$DATA_RAW, "observation Data" ,"2019.x
 # obs_2016 <- read_excel(file.path(org::PROJ$DATA_RAW, "observation Data" ,"2016.xlsx"))
 
 
-# transform to data tabels 2019 database
+# transform to data tabels 2019 database and creating new attributes
 
 
 setDT(diag_2019)
@@ -71,6 +71,7 @@ setDT(obs_2019)
 obs_2019[,ident_obs:=TRUE]
 
 
+#View(diag_2019)
 #some data cleaning &  some decriptive analysis
 
 xtabs(~diag_2019$`Patient DoB`)
@@ -100,6 +101,8 @@ xtabs(~diag_2019$id_within_baradmission)
 
 decripdiag_2019 <- diag_2019[id_within_baradmission==1]
 nrow(decripdiag_2019)
+setDT(decripdiag_2019)
+nrow(diag_2019)
 
 xtabs(~decripdiag_2019$`Patient Sex`)
 xtabs(~decripdiag_2019$`Marital Status`)
@@ -120,7 +123,17 @@ openxlsx :: write.xlsx(departments,
 
 xtabs(~decripdiag_2019$`Medical Order Note`)
 
-unique(dru_2019$)
+unique(drug_2019$NAME)
+drugs <- xtabs(~drug_2019$NAME)
+
+openxlsx :: write.xlsx(drugs, 
+                       file.path(org::PROJ$SHARED_TODAY,"2019drugs.xlsx"))
+
+
+labtests <- xtabs(~lab_2019$`Labtest Name`)
+
+openxlsx :: write.xlsx(labtests, 
+                       file.path(org::PROJ$SHARED_TODAY,"2019labtests.xlsx"))
 
 
 #creat new variable age in prescdiag2019
@@ -136,7 +149,7 @@ str(diag_2019)
 unique(diag_2019$`Diagnose Name`)
 
 
-tam <- xtabs(~ diag_2019$'Diagnose Name')
+tam <- xtabs(~decripdiag_2019$'Diagnose Name')
 
 #file.path(org::PROJ$DATA_RAW,"2019.xlsx")
 #use SHARED TODAY FOR RESULTS 
@@ -164,11 +177,180 @@ tamm <- CrossTable (diag_2019$`Diagnose Name`,diag_2019$Organization,addNA=T)
 openxlsx :: write.xlsx(tamm, 
                        file.path(org::PROJ$SHARED_TODAY,"2019cross.xlsx"))
 
+unique(decripdiag_2019$`Diagnose Name`)
+
+decripdiag_2019$`Diagnose Name`
 
 
-#diag_2019['Diagnose Name'%in% c("Addisonian crisis","Tumor lysis syndrome", "Vitamin deficiency, unspecified")                                                                                  
+decripdiag_2019 [`Diagnose Name`%in% c("Type 2 diabetes mellitus"	,
+                                       "Type 2 diabetes mellitus with circulatory complications",
+                                       "Type 2 diabetes mellitus with diabetic arthropathy",
+                                       "Type 2 diabetes mellitus with diabetic cataract",
+                                       "Type 2 diabetes mellitus with diabetic chronic kidney disease",
+                                       "Type 2 diabetes mellitus with diabetic dermatitis",
+                                       "Type 2 diabetes mellitus with diabetic nephropathy",
+                                       "Type 2 diabetes mellitus with diabetic neuropathic arthropathy",
+                                       "Type 2 diabetes mellitus with diabetic neuropathy, unspecified"	,
+                                       "Type 2 diabetes mellitus with diabetic peripheral angiopathy with gangrene",
+                                       "Type 2 diabetes mellitus with diabetic peripheral angiopathy without gangrene",
+                                       "Type 2 diabetes mellitus with diabetic polyneuropathy",
+                                       "Type 2 diabetes mellitus with foot ulcer",
+                                       "Type 2 diabetes mellitus with hyperglycemia",
+                                       "Type 2 diabetes mellitus with hyperosmolarity"	,
+                                       "Type 2 diabetes mellitus with hyperosmolarity with coma",
+                                       "Type 2 diabetes mellitus with hyperosmolarity without nonketotic hyperglycemic-hyperosmolar coma (NKHHC)"	,
+                                       "Type 2 diabetes mellitus with hypoglycemia",
+                                       "Type 2 diabetes mellitus with hypoglycemia with coma"	,
+                                       "Type 2 diabetes mellitus with hypoglycemia without coma"	,
+                                       "Type 2 diabetes mellitus with kidney complications"	,
+                                       "Type 2 diabetes mellitus with mild nonproliferative diabetic retinopathy"	,
+                                       "Type 2 diabetes mellitus with moderate nonproliferative diabetic retinopathy"	,
+                                       "Type 2 diabetes mellitus with neurological complications"	,
+                                       "Type 2 diabetes mellitus with ophthalmic complications"	,
+                                       "Type 2 diabetes mellitus with other circulatory complications"	,
+                                       "Type 2 diabetes mellitus with other diabetic arthropathy"	,
+                                       "Type 2 diabetes mellitus with other diabetic kidney complication"	,
+                                       "Type 2 diabetes mellitus with other diabetic neurological complication"	,
+                                       "Type 2 diabetes mellitus with other diabetic ophthalmic complication"	,
+                                       "Type 2 diabetes mellitus with other oral complications"	,
+                                       "Type 2 diabetes mellitus with other skin complications"	,
+                                       "Type 2 diabetes mellitus with other skin ulcer"	,
+                                       "Type 2 diabetes mellitus with other specified complication"	,
+                                       "Type 2 diabetes mellitus with other specified complications"	,
+                                       "Type 2 diabetes mellitus with proliferative diabetic retinopathy"	,
+                                       "Type 2 diabetes mellitus with severe nonproliferative diabetic retinopathy without macular edema"	,
+                                       "Type 2 diabetes mellitus with skin complications"	,
+                                       "Type 2 diabetes mellitus with unspecified complications"	,
+                                       "Type 2 diabetes mellitus with unspecified diabetic retinopathy"	,
+                                       "Type 2 diabetes mellitus with unspecified diabetic retinopathy with macular edema"	,
+                                       "Type 2 diabetes mellitus with unspecified diabetic retinopathy without macular edema"	,
+                                       "Type 2 diabetes mellitus without complications"	)
+                                  ,DMM2:=T]
 
-#                             ,DMDIAG:=T]
+
+xtabs(~decripdiag_2019$DMM2)
+
+
+tamdm <- CrossTable (decripdiag_2019$Organization,decripdiag_2019$DMM2,addNA=T)
+
+openxlsx :: write.xlsx(tamdm, 
+                       file.path(org::PROJ$SHARED_TODAY,"2019DM.xlsx"))
+
+
+
+tamdmage <- CrossTable (decripdiag_2019$age_cat,decripdiag_2019$DMM2,addNA=T)
+
+openxlsx :: write.xlsx(tamdmage, 
+                       file.path(org::PROJ$SHARED_TODAY,"2019DMage.xlsx"))
+
+
+
+
+tamdmsex <- CrossTable (decripdiag_2019$`Patient Sex`,decripdiag_2019$DMM2,addNA=T)
+
+openxlsx :: write.xlsx(tamdmsex, 
+                       file.path(org::PROJ$SHARED_TODAY,"2019DMsex.xlsx"))
+
+
+
+
+tamdmmar <- CrossTable (decripdiag_2019$`Marital Status`,decripdiag_2019$DMM2,addNA=T)
+
+openxlsx :: write.xlsx(tamdmmar, 
+                       file.path(org::PROJ$SHARED_TODAY,"2019DMmar.xlsx"))
+
+decripdiag_2019[Organization%in% c("Ramallah PHC",
+                                   "Nablus PHC",
+                                   "Azzoun Clinic",
+                                   "Al Karantina Clinic",
+                                   "Tarqumia Clinic",
+                                   "Qalqilia PHC",
+                                   " مركز محمد بن راشد آل مكتوم / مديرية صحة نابلس",
+                                   "مركز الأمراض المزمنة و الجلدية")
+                
+                ,ident_clinic:=T]
+
+table2 <- decripdiag_2019[DMM2==T & ident_clinic==T,
+                          .(
+                            N=.N
+                            
+                          ),
+                          
+                          keyby=
+                            .(`Patient Sex`,
+                              age_cat,
+                              `Marital Status`
+                            )]
+openxlsx :: write.xlsx(table2, 
+                       file.path(org::PROJ$SHARED_TODAY,"2019DMtotal2.xlsx"))
+
+table1 <- decripdiag_2019[DMM2==T & ident_clinic==T,
+                         .(
+                            N=.N  
+                              
+                              ),
+  
+                                 keyby=
+                                .(age_cat,
+                                  `Patient Sex`
+                                 #, `Marital Status`
+                                )]
+
+openxlsx :: write.xlsx(table1, 
+                       file.path(org::PROJ$SHARED_TODAY,"2019DMtotal.xlsx"))
+
+
+
+
+diag_2019 [`Diagnose Name`%in% c("Type 2 diabetes mellitus"	,
+                                 "Type 2 diabetes mellitus with circulatory complications",
+                                 "Type 2 diabetes mellitus with diabetic arthropathy",
+                                 "Type 2 diabetes mellitus with diabetic cataract",
+                                 "Type 2 diabetes mellitus with diabetic chronic kidney disease",
+                                 "Type 2 diabetes mellitus with diabetic dermatitis",
+                                 "Type 2 diabetes mellitus with diabetic nephropathy",
+                                 "Type 2 diabetes mellitus with diabetic neuropathic arthropathy",
+                                 "Type 2 diabetes mellitus with diabetic neuropathy, unspecified"	,
+                                 "Type 2 diabetes mellitus with diabetic peripheral angiopathy with gangrene",
+                                 "Type 2 diabetes mellitus with diabetic peripheral angiopathy without gangrene",
+                                 "Type 2 diabetes mellitus with diabetic polyneuropathy",
+                                 "Type 2 diabetes mellitus with foot ulcer",
+                                 "Type 2 diabetes mellitus with hyperglycemia",
+                                 "Type 2 diabetes mellitus with hyperosmolarity"	,
+                                 "Type 2 diabetes mellitus with hyperosmolarity with coma",
+                                 "Type 2 diabetes mellitus with hyperosmolarity without nonketotic hyperglycemic-hyperosmolar coma (NKHHC)"	,
+                                 "Type 2 diabetes mellitus with hypoglycemia",
+                                 "Type 2 diabetes mellitus with hypoglycemia with coma"	,
+                                 "Type 2 diabetes mellitus with hypoglycemia without coma"	,
+                                 "Type 2 diabetes mellitus with kidney complications"	,
+                                 "Type 2 diabetes mellitus with mild nonproliferative diabetic retinopathy"	,
+                                 "Type 2 diabetes mellitus with moderate nonproliferative diabetic retinopathy"	,
+                                 "Type 2 diabetes mellitus with neurological complications"	,
+                                 "Type 2 diabetes mellitus with ophthalmic complications"	,
+                                 "Type 2 diabetes mellitus with other circulatory complications"	,
+                                 "Type 2 diabetes mellitus with other diabetic arthropathy"	,
+                                 "Type 2 diabetes mellitus with other diabetic kidney complication"	,
+                                 "Type 2 diabetes mellitus with other diabetic neurological complication"	,
+                                 "Type 2 diabetes mellitus with other diabetic ophthalmic complication"	,
+                                 "Type 2 diabetes mellitus with other oral complications"	,
+                                 "Type 2 diabetes mellitus with other skin complications"	,
+                                 "Type 2 diabetes mellitus with other skin ulcer"	,
+                                 "Type 2 diabetes mellitus with other specified complication"	,
+                                 "Type 2 diabetes mellitus with other specified complications"	,
+                                 "Type 2 diabetes mellitus with proliferative diabetic retinopathy"	,
+                                 "Type 2 diabetes mellitus with severe nonproliferative diabetic retinopathy without macular edema"	,
+                                 "Type 2 diabetes mellitus with skin complications"	,
+                                 "Type 2 diabetes mellitus with unspecified complications"	,
+                                 "Type 2 diabetes mellitus with unspecified diabetic retinopathy"	,
+                                 "Type 2 diabetes mellitus with unspecified diabetic retinopathy with macular edema"	,
+                                 "Type 2 diabetes mellitus with unspecified diabetic retinopathy without macular edema"	,
+                                 "Type 2 diabetes mellitus without complications"	)
+                 
+                 ,DM2:=T]
+
+xtabs(~diag_2019$DM2)
+xtabs(~decripdiag_2019$ident_clinic)
+
 
 
 # #table <- diag_2019[,
