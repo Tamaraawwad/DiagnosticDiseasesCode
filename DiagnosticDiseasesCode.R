@@ -81,6 +81,7 @@ xtabs(~diag_2019$`Patient DoB`)
 
 unique(diag_2019$`Patient DoB`)
 
+
 diag_2019[,PatientDoB:=as.Date(`Patient DoB`, format="%d-%m-%Y")]
 diag_2019[,admissiondate:=as.Date(`Admission Date`, format="%d-%m-%Y")]
 
@@ -155,7 +156,7 @@ tam <- xtabs(~decripdiag_2019$'Diagnose Name')
 #use SHARED TODAY FOR RESULTS 
 
 openxlsx :: write.xlsx(tam, 
-                       file.path(org::PROJ$SHARED_TODAY,"2019.xlsx"))
+                       file.path(org::PROJ$SHARED_TODAY,"2019diagnosis.xlsx"))
 
 
 
@@ -282,22 +283,7 @@ table2 <- decripdiag_2019[DMM2==T & ident_clinic==T,
                               `Marital Status`
                             )]
 openxlsx :: write.xlsx(table2, 
-                       file.path(org::PROJ$SHARED_TODAY,"2019DMtotal2.xlsx"))
-
-table1 <- decripdiag_2019[DMM2==T & ident_clinic==T,
-                         .(
-                            N=.N  
-                              
-                              ),
-  
-                                 keyby=
-                                .(age_cat,
-                                  `Patient Sex`
-                                 #, `Marital Status`
-                                )]
-
-openxlsx :: write.xlsx(table1, 
-                       file.path(org::PROJ$SHARED_TODAY,"2019DMtotal.xlsx"))
+                       file.path(org::PROJ$SHARED_TODAY,"2019DM2.xlsx"))
 
 
 
