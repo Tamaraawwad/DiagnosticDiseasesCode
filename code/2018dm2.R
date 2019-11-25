@@ -1,5 +1,4 @@
 
-
 org::AllowFileManipulationFromInitialiseProject()
 org::InitialiseProject(
   
@@ -16,18 +15,16 @@ library(gmodels)
 
 
 
-
-diag_2017 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2017.xlsx"))
-diag_2016 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2016.xlsx"))
+diag_2018 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2018.xlsx"))
 
 
 
-setDT(diag_2017)
-diag_2017[,ident_diag:=TRUE]
+setDT(diag_2018)
+diag_2018[,ident_diag:=TRUE]
 
 
-setDT(diag_2016)
-diag_2016[,ident_diag:=TRUE]
+#some data cleaning &  some decriptive analysis
+unique(diag_2018$`Diagnose Name`)
 
 
 
@@ -138,3 +135,18 @@ table8 <- decripdiag_2018[DMM2==T & ident_clinic==T,
                             )]
 openxlsx :: write.xlsx(table8, 
                        file.path(org::PROJ$SHARED_TODAY,"2018DM2.xlsx"))
+#for each clinic in 2018
+
+table8R<- decripdiag_2018[DMM2==T & Organization%in% c("Ramallah PHC"),
+                         .(
+                           N=.N
+                           
+                         ),
+                         
+                         keyby=
+                           .(`Patient Sex`,
+                             age_cat,
+                             `Marital Status`
+                           )]
+openxlsx :: write.xlsx(table8R, 
+                       file.path(org::PROJ$SHARED_TODAY,"2018DM2RAMALLA.xlsx"))
