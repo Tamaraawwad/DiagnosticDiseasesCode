@@ -107,7 +107,7 @@ decripdiag_2017 [`Diagnose Name`%in% c("Type 2 diabetes mellitus"	,
                                        "Type 2 diabetes mellitus with unspecified diabetic retinopathy with macular edema"	,
                                        "Type 2 diabetes mellitus with unspecified diabetic retinopathy without macular edema"	,
                                        "Type 2 diabetes mellitus without complications"	)
-                 ,DMM2:=T]
+                 ,DM2:=T]
 
 organdm7 <- xtabs(~decripdiag_2017$Organization)
 openxlsx :: write.xlsx(organdm7, 
@@ -125,7 +125,7 @@ decripdiag_2017[Organization%in% c("Ramallah PHC",
                 
                 ,ident_clinic:=T]
 
-table7 <- decripdiag_2017[DMM2==T & ident_clinic==T,
+table7 <- decripdiag_2017[DM2==T & ident_clinic==T,
                           .(
                             N=.N
                             
@@ -138,6 +138,18 @@ table7 <- decripdiag_2017[DMM2==T & ident_clinic==T,
                             )]
 openxlsx :: write.xlsx(table7, 
                        file.path(org::PROJ$SHARED_TODAY,"2017DM2.xlsx"))
+
+table07 <- decripdiag_2017[DM2==T & ident_clinic==T,
+                           .(
+                             N=.N
+                             
+                           ),
+                           
+                           keyby=Organization
+                           ]
+
+openxlsx :: write.xlsx(table07, 
+                       file.path(org::PROJ$SHARED_TODAY,"2017DM2perorg.xlsx"))
 
 
 
@@ -162,7 +174,7 @@ diag_2016[,age_cat:=cut(age,
 diag_2016[,id_within_baradmission:=1:.N,by=BARADMISSIONID]
 xtabs(~diag_2016$id_within_baradmission)
 
-decripdiag_2016 <- diag_2017[id_within_baradmission==1]
+decripdiag_2016 <- diag_2016[id_within_baradmission==1]
 nrow(decripdiag_2016)
 setDT(decripdiag_2016)
 nrow(diag_2016)
@@ -172,7 +184,7 @@ diagnosedm6 <- xtabs(~decripdiag_2016$`Diagnose Name`)
 openxlsx :: write.xlsx(diagnosedm6, 
                        file.path(org::PROJ$SHARED_TODAY,"2016diagnosis.xlsx"))
 
-
+diagnosedm6 <- xtabs(~diag_2016$`Diagnose Name`)
 
 decripdiag_2016 [`Diagnose Name`%in% c("Type 2 diabetes mellitus"	,
                                        "Type 2 diabetes mellitus with circulatory complications",
@@ -217,7 +229,7 @@ decripdiag_2016 [`Diagnose Name`%in% c("Type 2 diabetes mellitus"	,
                                        "Type 2 diabetes mellitus with unspecified diabetic retinopathy with macular edema"	,
                                        "Type 2 diabetes mellitus with unspecified diabetic retinopathy without macular edema"	,
                                        "Type 2 diabetes mellitus without complications"	)
-                 ,DMM2:=T]
+                 ,DM2:=T]
 
 organdm6 <- xtabs(~decripdiag_2016$Organization)
 openxlsx :: write.xlsx(organdm6, 
@@ -235,7 +247,7 @@ decripdiag_2016[Organization%in% c("Ramallah PHC",
                 
                 ,ident_clinic:=T]
 
-table6 <- decripdiag_2016[DMM2==T & ident_clinic==T,
+table6 <- decripdiag_2016[DM2==T & ident_clinic==T,
                           .(
                             N=.N
                             
@@ -248,3 +260,22 @@ table6 <- decripdiag_2016[DMM2==T & ident_clinic==T,
                             )]
 openxlsx :: write.xlsx(table6, 
                        file.path(org::PROJ$SHARED_TODAY,"2016DM2.xlsx"))
+
+
+#for each clinics the size of patients with dm2 in 2019 
+
+
+
+
+table06 <- decripdiag_2016[DM2==T & ident_clinic==T,
+                           .(
+                             N=.N
+                             
+                           ),
+                           
+                           keyby=Organization
+                           ]
+
+openxlsx :: write.xlsx(table06, 
+                       file.path(org::PROJ$SHARED_TODAY,"2016DM2perorg.xlsx"))
+

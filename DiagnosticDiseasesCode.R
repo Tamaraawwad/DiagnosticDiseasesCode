@@ -60,7 +60,6 @@ obs_2019 <- read_excel(file.path(org::PROJ$DATA_RAW, "observation Data" ,"2019.x
 setDT(diag_2019)
 diag_2019[,ident_diag:=TRUE]
 
-
 setDT(drug_2019)
 drug_2019[,ident_drug:=TRUE]
 
