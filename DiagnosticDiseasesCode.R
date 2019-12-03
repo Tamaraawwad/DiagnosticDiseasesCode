@@ -199,7 +199,7 @@ openxlsx :: write.xlsx(tamm,
 
 #d[question, assignment, group/by]
 
-#diag_2019[BARADMISSIONID == 2001307447169]
+#diag_2019[BARADMISSIONID == 2001021117768]
 # we need to merge diag and lab by bara &medical order id 
 #then merge with obs by bara,medical, and admition date
 #then with drugs by bara  ....more than one drug

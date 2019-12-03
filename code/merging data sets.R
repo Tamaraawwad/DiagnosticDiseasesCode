@@ -21,6 +21,12 @@ xtabs(~diag_2019$id_within_baradmission)
 drug_2019[,id_within_baradmission:=1:.N,by="BARADMISSIONID"]
 xtabs(~drug_2019$id_within_baradmission)
 
+names(drug_2019)
+
+dcast.data.table()
+#dcast(DATATABLE, variables that uniquely identify rows ~ the values as your new columns)
+#value.var: you have your rows, your columns, and the variable you are shifting: which is this
+
 
 #step 2. merge
 d2019 <- merge(diag_2019, drug_2019, by="BARADMISSIONID")

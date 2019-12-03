@@ -24,11 +24,11 @@ diag_2016 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2016.xlsx"))
 
 setDT(diag_2017)
 diag_2017[,ident_diag:=TRUE]
-
+diag_2017[,year:=2017]
 
 setDT(diag_2016)
 diag_2016[,ident_diag:=TRUE]
-
+diag_2016[,year:=2016]
 
 
 #data cleaning for 2017
@@ -120,7 +120,7 @@ decripdiag_2017[Organization%in% c("Ramallah PHC",
                                    "Al Karantina Clinic",
                                    "Tarqumia Clinic",
                                    "Qalqilia PHC",
-                                   " مركز محمد بن راشد آل مكتوم / مديرية صحة نابلس",
+                                   "مركز محمد بن راشد آل مكتوم / مديرية صحة نابلس",
                                    "مركز الأمراض المزمنة و الجلدية")
                 
                 ,ident_clinic:=T]
@@ -242,7 +242,7 @@ decripdiag_2016[Organization%in% c("Ramallah PHC",
                                    "Al Karantina Clinic",
                                    "Tarqumia Clinic",
                                    "Qalqilia PHC",
-                                   " مركز محمد بن راشد آل مكتوم / مديرية صحة نابلس",
+                                   "مركز محمد بن راشد آل مكتوم / مديرية صحة نابلس",
                                    "مركز الأمراض المزمنة و الجلدية")
                 
                 ,ident_clinic:=T]

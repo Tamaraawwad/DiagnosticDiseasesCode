@@ -14,14 +14,11 @@ library(gmodels)
 
 
 diag_2019 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2019.xlsx"))
-diag_2018 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2018.xlsx"))
 
 setDT(diag_2019)
 diag_2019[,ident_diag:=TRUE]
+diag_2019[,year:=2019]
 
-diag_2018 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2018.xlsx"))
-setDT(diag_2018)
-diag_2018[,ident_diag:=TRUE]
 
 
 #some data cleaning &  some decriptive analysis
@@ -62,7 +59,7 @@ diag_2019[Organization%in% c("Ramallah PHC",
                              "Al Karantina Clinic",
                              "Tarqumia Clinic",
                              "Qalqilia PHC",
-                             " مركز محمد بن راشد آل مكتوم / مديرية صحة نابلس",
+                             "مركز محمد بن راشد آل مكتوم / مديرية صحة نابلس",
                              "مركز الأمراض المزمنة و الجلدية")
           
           ,ident_clinic:=T]
@@ -139,138 +136,6 @@ openxlsx :: write.xlsx(table2,
                        file.path(org::PROJ$SHARED_TODAY,"2019DM2.xlsx"))
 
 
-#demographic characters for dm2 in 2019 at ramallah
-
-table9R<- decripdiag_2019[DM2==T & Organization%in% c("Ramallah PHC"),
-                          .(
-                            N=.N
-                            
-                          ),
-                          
-                          keyby=
-                            .(`Patient Sex`,
-                              age_cat,
-                              `Marital Status`
-                            )]
-openxlsx :: write.xlsx(table9R, 
-                       file.path(org::PROJ$SHARED_TODAY,"2019DM2ramallah.xlsx"))
-#demographic characters for dm2 in 2019 at nablus
-
-
-table9n<- decripdiag_2019[DM2==T & Organization%in% c("Nablus PHC"),
-                          .(
-                            N=.N
-                            
-                          ),
-                          
-                          keyby=
-                            .(`Patient Sex`,
-                              age_cat,
-                              `Marital Status`
-                            )]
-openxlsx :: write.xlsx(table9n, 
-                       file.path(org::PROJ$SHARED_TODAY,"2019DM2nablus.xlsx"))
-table9n<- decripdiag_2019[DM2==T & Organization%in% c("Nablus PHC"),
-                          .(
-                            N=.N
-                            
-                          ),
-                          
-                          keyby=
-                            .(`Patient Sex`,
-                              age_cat,
-                              `Marital Status`
-                            )]
-openxlsx :: write.xlsx(table9n, 
-                       file.path(org::PROJ$SHARED_TODAY,"2019DM2nablus.xlsx"))
-
-table9a<- decripdiag_2019[DM2==T & Organization%in% c("Azzoun Clinic"),
-                          .(
-                            N=.N
-                            
-                          ),
-                          
-                          keyby=
-                            .(`Patient Sex`,
-                              age_cat,
-                              `Marital Status`
-                            )]
-openxlsx :: write.xlsx(table9a, 
-                       file.path(org::PROJ$SHARED_TODAY,"2019DM2azzon.xlsx"))
-
-
-table9k<- decripdiag_2019[DM2==T & Organization%in% c("Al Karantina Clinic"),
-                          .(
-                            N=.N
-                            
-                          ),
-                          
-                          keyby=
-                            .(`Patient Sex`,
-                              age_cat,
-                              `Marital Status`
-                            )]
-openxlsx :: write.xlsx(table9k, 
-                       file.path(org::PROJ$SHARED_TODAY,"2019DM2karantina.xlsx"))
-
-table9t<- decripdiag_2019[DM2==T & Organization%in% c("Tarqumia Clinic"),
-                          .(
-                            N=.N
-                            
-                          ),
-                          
-                          keyby=
-                            .(`Patient Sex`,
-                              age_cat,
-                              `Marital Status`
-                            )]
-openxlsx :: write.xlsx(table9t, 
-                       file.path(org::PROJ$SHARED_TODAY,"2019DM2tarqumia.xlsx"))
-
-
-table9q<- decripdiag_2019[DM2==T & Organization%in% c("Qalqilia PHC"),
-                          .(
-                            N=.N
-                            
-                          ),
-                          
-                          keyby=
-                            .(`Patient Sex`,
-                              age_cat,
-                              `Marital Status`
-                            )]
-openxlsx :: write.xlsx(table9q, 
-                       file.path(org::PROJ$SHARED_TODAY,"2019DM2qalqilia.xlsx"))
-
-table9m<- decripdiag_2019[DM2==T & Organization%in% c(" مركز محمد بن راشد آل مكتوم / مديرية صحة نابلس"),
-                          .(
-                            N=.N
-                            
-                          ),
-                          
-                          keyby=
-                            .(`Patient Sex`,
-                              age_cat,
-                              `Marital Status`
-                            )]
-openxlsx :: write.xlsx(table9m, 
-                       file.path(org::PROJ$SHARED_TODAY,"2019DM2markezmohammad.xlsx"))
-
-table9ma<- decripdiag_2019[DM2==T & Organization%in% c("مركز الأمراض المزمنة و الجلدية"),
-                          .(
-                            N=.N
-                            
-                          ),
-                          
-                          keyby=
-                            .(`Patient Sex`,
-                              age_cat,
-                              `Marital Status`
-                            )]
-openxlsx :: write.xlsx(table9ma, 
-                       file.path(org::PROJ$SHARED_TODAY,"2019DM2markezamrad.xlsx"))
-
-
 
 #for each clinics the size of patients with dm2 in 2019 
 
@@ -291,6 +156,8 @@ openxlsx :: write.xlsx(tablee,
 diag_2018 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2018.xlsx"))
 setDT(diag_2018)
 diag_2018[,ident_diag:=TRUE]
+diag_2018[,year:=2018]
+
 
 diag_2018[,PatientDoB:=as.Date(`Patient DoB`, format="%d-%m-%Y")]
 diag_2018[,admissiondate:=as.Date(`Admission Date`, format="%d-%m-%Y")]
@@ -366,17 +233,22 @@ decripdiag_2018 [`Diagnose Name`%in% c("Type 2 diabetes mellitus"	,
                                        "Type 2 diabetes mellitus without complications"	)
                  ,DM2:=T]
 
+organ8 <- xtabs(~decripdiag_2018$Organization)
+openxlsx :: write.xlsx(organ8, 
+                       file.path(org::PROJ$SHARED_TODAY,"2018organization.xlsx"))
 
-decripdiag_2018[Organization%in% c("Ramallah PHC",
+
+decripdiag_2018[Organization%in% c( "Ramallah PHC",
                                    "Nablus PHC",
                                    "Azzoun Clinic",
                                    "Al Karantina Clinic",
                                    "Tarqumia Clinic",
                                    "Qalqilia PHC",
-                                   " مركز محمد بن راشد آل مكتوم / مديرية صحة نابلس",
+                                   "مركز محمد بن راشد آل مكتوم / مديرية صحة نابلس",
                                    "مركز الأمراض المزمنة و الجلدية")
                 
                 ,ident_clinic:=T]
+
 
 table2 <- decripdiag_2018[DM2==T & ident_clinic==T,
                           .(
