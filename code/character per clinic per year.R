@@ -1,3 +1,7 @@
+
+
+#run 2016,2017,2018,2019 scripts first
+
 d <- rbind(decripdiag_2019,decripdiag_2018, decripdiag_2017, decripdiag_2016, fill=TRUE)
 nrow(d)
 
@@ -154,6 +158,96 @@ table9ma<- d[DM2==T & Organization%in% c("مركز الأمراض المزمنة
                              )]
 openxlsx :: write.xlsx(table9ma, 
                        file.path(org::PROJ$SHARED_TODAY,"DM2markezamrad.xlsx"))
+
+
+
+## to do predictive model
+tablepredic<- d[DM2==T,
+                .(
+                  NumberofDiabeticpatient=.N
+                  
+                ),
+                
+                keyby=
+                  .(
+                    year
+                  )]
+openxlsx :: write.xlsx(tablepredic, 
+                       file.path(org::PROJ$SHARED_TODAY,"DM2predict.xlsx"))
+
+#create an aggregated dataset of the number of diabetic patients every year/month
+
+
+
+#run a poisson regression, with
+#outcome = # diabetic patients
+#  exposures = year (continuous) and month (factor)
+
+poissonmodel <- glm(NumberofDiabeticpatient~year, tablepredic, family = "poisson")
+
+summary(poissonmodel)
+plot1<- plot(poissonmodel,x=year, y=NumberofDiabeticpatient)
+
+
+pred_data <- data.table(year=2015:2025)
+predicted <- predict(poissonmodel, pred_data)
+pred_data[,predicted:=exp(predicted)]
+
+#by month
+
+d[,month:=lubridate::month(admissiondate)]
+
+xtabs(~d$`Admission Date`)
+
+tablepredicm<- d[DM2==T,
+                .(
+                  NumberofDiabeticpatient=.N
+                  
+                ),
+                
+                keyby=
+                  .(
+                    year,
+                    month
+                  )]
+openxlsx :: write.xlsx(tablepredicm, 
+                       file.path(org::PROJ$SHARED_TODAY,"DM2real.xlsx"))
+
+poissonmodelm <- glm(NumberofDiabeticpatient~year+as.factor(month), tablepredicm, family = "poisson")
+
+summary(poissonmodelm)
+
+plot(poissonmodelm)
+
+
+#as.factor ....because otherwise 'month' is treated as continuous (edited) 
+#which means "the difference between january and february is the same as the difference between november and december"
+#it means something like "every month the number of patients increases by 1%, until we go december -> january, then it drops by 12%"
+#if you put month as a factor, then it models each month individually
+
+
+# expand.grid means create a data.table with all possible combinations
+
+
+pred_data <- data.table(expand.grid(year=2015:2025,month=1:12))
+predicted <- predict(poissonmodelm, pred_data)
+pred_data[,predicted:=exp(predicted)]
+
+openxlsx :: write.xlsx(pred_data, 
+                       file.path(org::PROJ$SHARED_TODAY,"DM2predictm.xlsx"))
+
+
+# make a graph
+# plotting the observed and predicted data
+# x-axis as time, y-axis as number of observation
+
+plot(x=time(),y=numberofobservations,)
+
+
+
+
+
+
 
 
 

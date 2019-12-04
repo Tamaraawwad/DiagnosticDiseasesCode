@@ -38,6 +38,7 @@ diag_2017[,PatientDoB:=as.Date(`Patient DoB`, format="%d-%m-%Y")]
 diag_2017[,admissiondate:=as.Date(`Admission Date`, format="%d-%m-%Y")]
 
 
+
 diag_2017[,age:= as.numeric(difftime(as.Date(admissiondate), as.Date(PatientDoB), units="days"))/365.25]
 diag_2017[, age:= round(age, digits=0)]
 
