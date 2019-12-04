@@ -186,7 +186,7 @@ openxlsx :: write.xlsx(tablepredic,
 poissonmodel <- glm(NumberofDiabeticpatient~year, tablepredic, family = "poisson")
 
 summary(poissonmodel)
-plot1<- plot(poissonmodel,x=year, y=NumberofDiabeticpatient)
+
 
 
 pred_data <- data.table(year=2015:2025)
@@ -241,8 +241,9 @@ openxlsx :: write.xlsx(pred_data,
 # plotting the observed and predicted data
 # x-axis as time, y-axis as number of observation
 
-plot(x=time(),y=numberofobservations,)
-
+library(tidyverse)
+ggplot(data = pred_data) + 
+  geom_point(mapping = aes(x = time, y = "number of observations"))
 
 
 
