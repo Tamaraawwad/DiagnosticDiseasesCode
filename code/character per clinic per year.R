@@ -210,6 +210,8 @@ tablepredicm<- d[DM2==T,
                     year,
                     month
                   )]
+
+tablepredicm[,x:=1:.N]
 openxlsx :: write.xlsx(tablepredicm, 
                        file.path(org::PROJ$SHARED_TODAY,"DM2real.xlsx"))
 
@@ -231,8 +233,9 @@ plot(poissonmodelm)
 
 pred_data <- data.table(expand.grid(year=2015:2025,month=1:12))
 predicted <- predict(poissonmodelm, pred_data)
-pred_data[,predicted:=exp(predicted)]
+pred_data[,predicted:=round(exp(predicted),digits = 0)]
 
+pred_data[,x:=1:.N]
 openxlsx :: write.xlsx(pred_data, 
                        file.path(org::PROJ$SHARED_TODAY,"DM2predictm.xlsx"))
 
@@ -246,21 +249,32 @@ library(tidyverse)
 # devtools::install_github("r-lib/rlang", build_vignettes = TRUE)
 
 
-p<- ggplot(data=pred_data, 
-              mapping=aes(x=month,
-                          y=predicted,
-                          label=predicted,
-                          fill=as.factor(month)
-                          )
-              )
+
+setorder(tablepredicm, year, month)
+
+setorder(pred_data, year, month)
+
+tablepredicm[,x:=1:.N]
+pred_data[,x:=1:.N]
+p <- ggplot()
+p <- p + geom_line(data=pred_data, mapping = aes(x=x, y=predicted, color="Predicted"))
+p <- p + geom_line(data=tablepredicm, mapping = aes(x=x, y=NumberofDiabeticpatient, color="Observed"))
+p
+
+
+ggsave(
+  filename=file.path(
+    org::PROJ$SHARED_TODAY,
+    "observed_predicted.png"),
+  plot=p, 
+  width = 297, 
+  height = 210, 
+  units = "mm")
 
 
 
-ggsave(org::PROJ$SHARED_TODAY,"PvsR.png",plot = P,
+
+
        
-       width = 297, height = 210, units = "mm")
-
-
-
 
 
