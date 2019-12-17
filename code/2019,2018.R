@@ -107,7 +107,8 @@ diag_2019 [`Diagnose Name`%in% c("Type 2 diabetes mellitus"	,
                                  "Type 2 diabetes mellitus with unspecified diabetic retinopathy"	,
                                  "Type 2 diabetes mellitus with unspecified diabetic retinopathy with macular edema"	,
                                  "Type 2 diabetes mellitus with unspecified diabetic retinopathy without macular edema"	,
-                                 "Type 2 diabetes mellitus without complications"	)
+                                 "Type 2 diabetes mellitus without complications",
+                                 "Type 2 diabetes mellitus with mild nonproliferative diabetic retinopathy with macular edema")
            
            ,DM2:=T]
 
@@ -230,7 +231,8 @@ decripdiag_2018 [`Diagnose Name`%in% c("Type 2 diabetes mellitus"	,
                                        "Type 2 diabetes mellitus with unspecified diabetic retinopathy"	,
                                        "Type 2 diabetes mellitus with unspecified diabetic retinopathy with macular edema"	,
                                        "Type 2 diabetes mellitus with unspecified diabetic retinopathy without macular edema"	,
-                                       "Type 2 diabetes mellitus without complications"	)
+                                       "Type 2 diabetes mellitus without complications",
+                                       "Type 2 diabetes mellitus with mild nonproliferative diabetic retinopathy with macular edema"	)
                  ,DM2:=T]
 
 organ8 <- xtabs(~decripdiag_2018$Organization)

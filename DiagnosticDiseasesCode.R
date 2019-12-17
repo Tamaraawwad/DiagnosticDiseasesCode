@@ -29,16 +29,16 @@ library(gmodels)
 
 
 diag_2019 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2019.xlsx"))
-# diag_2018 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2018.xlsx"))
-# diag_2017 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2017.xlsx"))
-# diag_2016 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2016.xlsx"))
+diag_2018 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2018.xlsx"))
+diag_2017 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2017.xlsx"))
+diag_2016 <- read_excel(file.path(org::PROJ$DATA_RAW, "Diag Data" ,"2016.xlsx"))
 
 
 # Drugs Data
 drug_2019 <- read_excel(file.path(org::PROJ$DATA_RAW, "Drugs Data" ,"2019.xlsx"))
-# drug_2018 <- read_excel(file.path(org::PROJ$DATA_RAW, "Drugs Data" ,"2018.xlsx"))
-# drug_2017 <- read_excel(file.path(org::PROJ$DATA_RAW, "Drugs Data" ,"2017.xlsx"))
-# drug_2016 <- read_excel(file.path(org::PROJ$DATA_RAW, "Drugs Data" ,"2016.xlsx"))
+drug_2018 <- read_excel(file.path(org::PROJ$DATA_RAW, "Drugs Data" ,"2018.xlsx"))
+drug_2017 <- read_excel(file.path(org::PROJ$DATA_RAW, "Drugs Data" ,"2017.xlsx"))
+drug_2016 <- read_excel(file.path(org::PROJ$DATA_RAW, "Drugs Data" ,"2016.xlsx"))
 
 
 #Lab Data
@@ -128,6 +128,24 @@ drugs <- xtabs(~drug_2019$NAME)
 
 openxlsx :: write.xlsx(drugs, 
                        file.path(org::PROJ$SHARED_TODAY,"2019drugs.xlsx"))
+
+drugs8 <- xtabs(~drug_2018$NAME)
+
+openxlsx :: write.xlsx(drugs8, 
+                       file.path(org::PROJ$SHARED_TODAY,"2018drugs.xlsx"))
+
+drugs7 <- xtabs(~drug_2017$NAME)
+
+openxlsx :: write.xlsx(drugs7, 
+                       file.path(org::PROJ$SHARED_TODAY,"2017drugs.xlsx"))
+
+drugs6 <- xtabs(~drug_2016$NAME)
+
+openxlsx :: write.xlsx(drugs6, 
+                       file.path(org::PROJ$SHARED_TODAY,"2016drugs.xlsx"))
+
+
+
 
 
 labtests <- xtabs(~lab_2019$`Labtest Name`)

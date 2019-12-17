@@ -17,8 +17,8 @@ decripdiag_2018[year==2018]
 decripdiag_2019[year==2019]
                 
                 
-diag_2019[Organization ==" مركز محمد بن راشد آل مكتوم / مديرية صحة نابلس"]
-diag_2019[Organization %in% c(" مركز محمد بن راشد آل مكتوم / مديرية صحة نابلس")]
+diag_2019[Organization =="مركز محمد بن راشد آل مكتوم / مديرية صحة نابلس"]
+diag_2019[Organization %in% c("مركز محمد بن راشد آل مكتوم / مديرية صحة نابلس")]
 
 decripdiag_2018[Organization =="Ramallah PHC"]
           
@@ -213,7 +213,7 @@ tablepredicm<- d[DM2==T,
 openxlsx :: write.xlsx(tablepredicm, 
                        file.path(org::PROJ$SHARED_TODAY,"DM2real.xlsx"))
 
-poissonmodelm <- glm(NumberofDiabeticpatient~year+as.factor(month), tablepredicm, family = "poisson")
+poissonmodelm <- glm(NumberofDiabeticpatient~year + as.factor(month), tablepredicm, family = "poisson")
 
 summary(poissonmodelm)
 
@@ -240,13 +240,25 @@ openxlsx :: write.xlsx(pred_data,
 # make a graph
 # plotting the observed and predicted data
 # x-axis as time, y-axis as number of observation
-
+library(rlang)
 library(tidyverse)
-ggplot(data = pred_data) + 
-  geom_point(mapping = aes(x = time, y = "number of observations"))
+# install.packages("devtools") 
+# devtools::install_github("r-lib/rlang", build_vignettes = TRUE)
+
+
+p<- ggplot(data=pred_data, 
+              mapping=aes(x=month,
+                          y=predicted,
+                          label=predicted,
+                          fill=as.factor(month)
+                          )
+              )
 
 
 
+ggsave(org::PROJ$SHARED_TODAY,"PvsR.png",plot = P,
+       
+       width = 297, height = 210, units = "mm")
 
 
 

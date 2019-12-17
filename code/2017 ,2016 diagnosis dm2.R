@@ -107,7 +107,8 @@ decripdiag_2017 [`Diagnose Name`%in% c("Type 2 diabetes mellitus"	,
                                        "Type 2 diabetes mellitus with unspecified diabetic retinopathy"	,
                                        "Type 2 diabetes mellitus with unspecified diabetic retinopathy with macular edema"	,
                                        "Type 2 diabetes mellitus with unspecified diabetic retinopathy without macular edema"	,
-                                       "Type 2 diabetes mellitus without complications"	)
+                                       "Type 2 diabetes mellitus without complications",
+                                       "Type 2 diabetes mellitus with mild nonproliferative diabetic retinopathy with macular edema")
                  ,DM2:=T]
 
 organdm7 <- xtabs(~decripdiag_2017$Organization)
@@ -229,7 +230,8 @@ decripdiag_2016 [`Diagnose Name`%in% c("Type 2 diabetes mellitus"	,
                                        "Type 2 diabetes mellitus with unspecified diabetic retinopathy"	,
                                        "Type 2 diabetes mellitus with unspecified diabetic retinopathy with macular edema"	,
                                        "Type 2 diabetes mellitus with unspecified diabetic retinopathy without macular edema"	,
-                                       "Type 2 diabetes mellitus without complications"	)
+                                       "Type 2 diabetes mellitus without complications",
+                                       "Type 2 diabetes mellitus with mild nonproliferative diabetic retinopathy with macular edema")
                  ,DM2:=T]
 
 organdm6 <- xtabs(~decripdiag_2016$Organization)
@@ -243,10 +245,12 @@ decripdiag_2016[Organization%in% c("Ramallah PHC",
                                    "Al Karantina Clinic",
                                    "Tarqumia Clinic",
                                    "Qalqilia PHC",
-                                   "مركز محمد بن راشد آل مكتوم / مديرية صحة نابلس",
-                                   "مركز الأمراض المزمنة و الجلدية")
+                                   "مركز محمد بن راشد آل مكتوم / مديرية صحة نابلس")
                 
                 ,ident_clinic:=T]
+
+xtabs(~decripdiag_2016$ident_clinic)
+nrow(decripdiag_2016)
 
 table6 <- decripdiag_2016[DM2==T & ident_clinic==T,
                           .(
